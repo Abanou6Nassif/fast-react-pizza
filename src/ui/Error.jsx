@@ -1,4 +1,5 @@
 import { useNavigate, useRouteError } from "react-router";
+import LinkButton from "./LinkButton";
 
 function Error() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ function Error() {
     <div>
       <h1>Something went wrong 😢</h1>
       <p>{error?.error?.message || error?.message}</p>
-      <button onClick={() => navigate(-1)}>&larr; Go back</button>
+      <LinkButton onClick={() => navigate(-1)}>&larr; Go back</LinkButton>
     </div>
   );
 }

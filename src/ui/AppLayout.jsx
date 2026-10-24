@@ -9,7 +9,8 @@ function AppLayout() {
 
   return (
     <div className="grid h-screen grid-rows-[auto_1fr_auto]">
-      {isloading && <Loader />}
+      {/* {isloading && <Loader />} */}
+      {true && <Loader />}
       <Header />
       <main className="mx-auto max-w-3xl overflow-y-auto">
         <Outlet />
