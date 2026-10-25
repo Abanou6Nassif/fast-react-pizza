@@ -10,23 +10,41 @@ const cartSlice = createSlice({
   reducers: {
     addItem(state, action) {
       //payload = newItem
-      state.cart.push(action.payload);
+      const itemIndex = state.cart.findIndex(
+        (item) => item.pizzaId === action.payload.pizzaId,
+      );
+      if (itemIndex === -1) state.cart.push(action.payload);
+      else {
+        state.cart[itemIndex].quantity++;
+        state.cart[itemIndex].totalPrice =
+          state.cart[itemIndex].quantity * state.cart[itemIndex].unitPrice;
+      }
     },
     deleteItem(state, action) {
       //payload = pizzaId
-      state.cart.splice(action.payload, 1);
+      const itemIndex = state.cart.findIndex(
+        (item) => item.pizzaId === action.payload,
+      );
+      if (itemIndex === -1) return;
+      state.cart.splice(itemIndex, 1);
     },
     increaseItemQuantity(state, action) {
       //payload = pizzaId
-      const item = state.cart[state.cart.findIndex(action.payload)];
+      const item =
+        state.cart[
+          state.cart.findIndex((item) => item.pizzaId === action.payload)
+        ];
       item.quantity++;
-      item.totalPrice = item.quantity + item.unitPrice;
+      item.totalPrice = item.quantity * item.unitPrice;
     },
     decreaseItemQuantity(state, action) {
       //payload = pizzaId
-      const item = state.cart[state.cart.findIndex(action.payload)];
+      const item =
+        state.cart[
+          state.cart.findIndex((item) => item.pizzaId === action.payload)
+        ];
       item.quantity--;
-      item.totalPrice = item.quantity + item.unitPrice;
+      item.totalPrice = item.quantity * item.unitPrice;
     },
     clearCart(state) {
       state.cart = [];
@@ -49,4 +67,8 @@ export const getTotalCartQuantity = (state) =>
 
 export const getTotalCartPrice = (state) =>
   state.cart.cart.reduce((sum, item) => sum + item.totalPrice, 0);
+
 export const getCart = (state) => state.cart.cart;
+
+export const getCurrentQuantityById = (id) => (state) =>
+  state.cart.cart.find((item) => item.pizzaId === id)?.quantity ?? 0;
