@@ -19,7 +19,8 @@
   /* Override the default sans-serif font stack */
   --font-sans: "Roboto Mono", monospace;
   /* Override the default h-screen utility to be 100dvh instead of 100vh */
-  --height-screen: 100dvh
+  --height-screen: 100dvh;
+  --breakpoint-xs: 375px;
 }
 
 @layer components {

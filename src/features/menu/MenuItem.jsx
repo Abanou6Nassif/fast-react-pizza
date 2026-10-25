@@ -4,6 +4,7 @@ import { formatCurrency } from "../../utils/helpers";
 import { addItem, getCurrentQuantityById } from "../cart/cartSlice";
 import { useSelector } from "react-redux";
 import DeleteItem from "../cart/DeleteItem";
+import UpdateItemQuantity from "../cart/UpdateItemQuantity";
 
 function MenuItem({ pizza }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
@@ -43,7 +44,15 @@ function MenuItem({ pizza }) {
             </p>
           )}
 
-          {isInCart && <DeleteItem pizzaId={id} />}
+          {isInCart && (
+            <div className="xs:flex-row flex flex-col items-center gap-3 sm:gap-8">
+              <UpdateItemQuantity
+                pizzaId={id}
+                currentQuantity={currentQuantity}
+              />
+              <DeleteItem pizzaId={id} />
+            </div>
+          )}
 
           {!soldOut && !isInCart && (
             <Button onClick={handleAdToCart} type="small">

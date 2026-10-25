@@ -45,6 +45,9 @@ const cartSlice = createSlice({
         ];
       item.quantity--;
       item.totalPrice = item.quantity * item.unitPrice;
+      // The individual case reducer functions that were passed in the reducers parameter.
+      // This enables reuse and testing if they were defined inline when calling createSlice.
+      if (item.quantity === 0) cartSlice.caseReducers.deleteItem(state, action);
     },
     clearCart(state) {
       state.cart = [];
