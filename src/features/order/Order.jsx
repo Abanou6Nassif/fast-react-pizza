@@ -1,6 +1,6 @@
 // Test ID: IIDSAT
 
-import { useLoaderData } from "react-router";
+import { useFetcher, useLoaderData } from "react-router";
 import { getOrder } from "../../services/apiRestaurant";
 import {
   calcMinutesLeft,
@@ -8,8 +8,18 @@ import {
   formatDate,
 } from "../../utils/helpers";
 import OrderItem from "./OrderItem";
+import { useEffect } from "react";
 
 function Order() {
+  //Useful for creating complex, dynamic user interfaces that require multiple, concurrent data interactions without causing a navigation.
+  // Fetchers track their own, independent state and can be used to load data, submit forms, and generally interact with action and loader functions.
+  const fetcher = useFetcher();
+  useEffect(
+    function () {
+      if (!fetcher.data && fetcher.state === "idle") fetcher.load("/menu");
+    },
+    [fetcher],
+  );
   const order = useLoaderData();
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const {
@@ -53,7 +63,15 @@ function Order() {
 
       <ul className="divide-y divide-stone-200 border-t border-b">
         {cart.map((item) => (
-          <OrderItem item={item} key={item.pizzaId} />
+          <OrderItem
+            item={item}
+            key={item.pizzaId}
+            isLoadingIngredients={fetcher.state === "loading"}
+            ingredients={
+              fetcher?.data?.find((pizza) => pizza.id === item.pizzaId)
+                .ingredients ?? []
+            }
+          />
         ))}
       </ul>
 
